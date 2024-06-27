@@ -1,7 +1,11 @@
 FROM nginx:latest
 
 # Install necessary packages
-RUN apt-get update && apt-get install -y cron curl
+RUN apt-get update && apt-get install -y cron curl tzdata
+
+# Set the timezone
+ENV TZ=Europe/Berlin
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Create necessary directories
 RUN mkdir -p /var/www/html
