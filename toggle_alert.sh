@@ -1,9 +1,9 @@
 #!/bin/bash
 
 if [ "$1" == "start" ]; then
-    sed -i 's/$not_alert/0/g' /etc/nginx/conf.d/default.conf
+    touch /var/www/html/alert_on
 elif [ "$1" == "stop" ]; then
-    sed -i 's/$not_alert/1/g' /etc/nginx/conf.d/default.conf
+    rm -f /var/www/html/alert_on
 fi
 
 nginx -s reload
