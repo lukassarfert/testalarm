@@ -20,5 +20,8 @@ COPY crontab.txt /etc/cron.d/probealarm-cron
 # Create a log file for cron job
 RUN touch /var/log/cron.log
 
+# Expose port 80
+EXPOSE 80
+
 # Start the cron service and nginx
 CMD /usr/local/bin/entrypoint.sh
