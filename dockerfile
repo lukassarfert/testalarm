@@ -3,6 +3,9 @@ FROM nginx:latest
 # Install necessary packages
 RUN apt-get update && apt-get install -y cron curl
 
+# Create necessary directories
+RUN mkdir -p /var/www/html
+
 # Copy the Nginx default config
 COPY default.conf /etc/nginx/conf.d/default.conf
 
