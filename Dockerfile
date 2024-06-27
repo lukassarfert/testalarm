@@ -1,17 +1,24 @@
-# Start from the official Nginx image
-FROM nginx:alpine
+FROM nginx:latest
 
-# Copy the custom configuration file for Nginx
-COPY nginx.conf /etc/nginx/nginx.conf
+# Install necessary packages
+RUN apt-get update && apt-get install -y cron curl
 
-# Copy the script to the container
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
+# Copy the Nginx default config
+COPY default.conf /etc/nginx/conf.d/default.conf
 
-# Set the environment variables for the alarm time and duration
-ENV ALARM_DAY=Friday
-ENV ALARM_TIME=11:45
-ENV ALARM_DURATION=5
+# Copy the custom entrypoint script
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Run the custom start script
-CMD ["/start.sh"]
+# Copy the toggle alert script
+COPY toggle_alert.sh /usr/local/bin/toggle_alert.sh
+RUN chmod +x /usr/local/bin/toggle_alert.sh
+
+# Copy the crontab file (empty for now)
+COPY crontab.txt /etc/cron.d/probealarm-cron
+
+# Create a log file for cron job
+RUN touch /var/log/cron.log
+
+# Start the cron service and nginx
+CMD /usr/local/bin/entrypoint.sh
